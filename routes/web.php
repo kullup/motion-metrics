@@ -30,6 +30,8 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+    Route::get('/workouts', [WorkoutController::class, 'index'])->name('workouts.index');
+    Route::get('/workouts/show/{id}', [WorkoutController::class, 'show'])->name('workouts.show');
     Route::get('/workouts/create', [WorkoutController::class, 'create'])->name('workouts.create');
     Route::post('/workouts/store', [WorkoutController::class, 'store'])->name('workouts.store');
 });

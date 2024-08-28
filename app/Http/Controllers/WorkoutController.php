@@ -14,7 +14,9 @@ class WorkoutController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('Workouts/Index', [
+            'workouts' => Workout::where('user_id', Auth::id())->get()
+        ]);
     }
 
     /**
@@ -54,9 +56,13 @@ class WorkoutController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Workout $workout)
+    public function show($id)
     {
-        //
+        $workout = Workout::where('id', $id)->first();
+
+        return Inertia::render('Workouts/Show', [
+            'workout' => $workout
+        ]);
     }
 
     /**
