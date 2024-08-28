@@ -18,6 +18,8 @@
         "vue": "^3.4.0"
     },
     "dependencies": {
-        "flowbite": "^2.5.1"
+        "apexcharts": "^3.52.0",
+        "flowbite": "^2.5.1",
+        "vue3-apexcharts": "^1.5.3"
     }
 }
