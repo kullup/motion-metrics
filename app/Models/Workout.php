@@ -11,6 +11,7 @@ class Workout extends Model
 
     protected $fillable = [
         'user_id',
+        'name',
         'attachment',
         'mimetype',
         'distance',
@@ -23,6 +24,7 @@ class Workout extends Model
     ];
 
     protected $casts = [
+        'name' => 'string',
         'attachment' => 'string',
         'mimetype' => 'string',
         'distance' => 'float',
