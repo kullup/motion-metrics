@@ -39,7 +39,7 @@ Route::post('/workouts/create', function () {
 
     User::create($attributes);
 
-    return redirect()->route('dashboard'); // ->with('success', 'Workout created.');
+    return redirect('workouts/create'); // ->with('success', 'Workout created.');
 })->middleware(['auth', 'verified'])->name('workouts.store');
 
 require __DIR__.'/auth.php';
