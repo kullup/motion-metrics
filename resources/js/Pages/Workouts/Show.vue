@@ -2,7 +2,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import VueApexCharts from 'vue3-apexcharts';
-import { ref, onMounted } from 'vue';
 
 const props = defineProps({
     workout: {
@@ -13,8 +12,6 @@ const props = defineProps({
 
 let options = {
     chart: {
-        height: "100%",
-        maxWidth: "100%",
         type: "area",
         fontFamily: "Inter, sans-serif",
         dropShadow: {
@@ -43,7 +40,7 @@ let options = {
         enabled: false,
     },
     stroke: {
-        width: 6,
+        width: 2,
     },
     grid: {
         show: false,
@@ -96,11 +93,9 @@ if (document.getElementById("area-chart") && typeof ApexCharts !== 'undefined') 
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 pb-6">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="text-gray-900 dark:text-gray-100">
-
-
-                        <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
+                        <div class="w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                             <div class="flex justify-between">
                                 <div>
                                     <h5 class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">32.4k
@@ -118,7 +113,7 @@ if (document.getElementById("area-chart") && typeof ApexCharts !== 'undefined') 
                                     </svg>
                                 </div>
                             </div>
-                            <VueApexCharts type="area" :options="options" :series="options.series" />
+                            <VueApexCharts width="100%" height="200" type="area" :options="options" :series="options.series" />
                             <div
                                 class="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">
                                 <div class="flex justify-between items-center pt-5">
