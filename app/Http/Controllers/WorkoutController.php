@@ -9,6 +9,33 @@ use Illuminate\Support\Facades\Auth;
 
 class WorkoutController extends Controller
 {
+    public function processTCX($id)
+    {
+        $workout = Workout::where('id', $id)->first();
+
+        $tcx = simplexml_load_file(storage_path('app/' . $workout->attachment));
+
+        $trackpoints = [];
+
+        $counter = 0;
+        foreach($tcx->Activities->Activity->Lap as $lap) {
+            foreach($lap->Track->Trackpoint as $trackpoint) {
+                $counter++;
+                if ($counter % 25 == 0) {
+                    if ($trackpoint->HeartRateBpm) {
+                        $trackpoints[] = (int) $trackpoint->HeartRateBpm->Value[0];
+                    }
+                }
+            }
+        }
+
+        $workout->trackpoints_heart_rate = $trackpoints;
+
+        $workout->save();
+
+        return redirect('workouts');
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -40,17 +67,13 @@ class WorkoutController extends Controller
         $attributes['user_id'] = Auth::id();
         $attributes['attachment'] = $attributes['file']->store('workouts');
         $attributes['mimetype'] = $attributes['file']->getMimeType();
-        $attributes['distance'] = 0;
-        $attributes['duration'] = 0;
-        $attributes['pace'] = 0;
-        $attributes['heart_rate'] = 0;
-        $attributes['elevation_gain'] = 0;
-        $attributes['date'] = now();
-        $attributes['trackpoints_heart_rate'] = [];
-    
-        Workout::create($attributes);
-    
-        return redirect('workouts/create');
+
+        $newWorkout = Workout::create($attributes);
+        $workoutId = $newWorkout->id;
+
+        $this->processTCX($workoutId);
+
+        return redirect('workouts');
     }
 
     /**
