@@ -2,10 +2,13 @@
 
 use App\Models\User;
 use Inertia\Inertia;
+use App\Models\Workout;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Request;
 use App\Http\Controllers\ProfileController;
+
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -33,11 +36,21 @@ Route::get('/workouts/create', function () {
 Route::post('/workouts/create', function () {
     $attributes = Request::validate([
         'name' => ['required', 'string', 'max:255'],
-        'email' => ['required', 'string', 'email', 'max:255'],
-        'password' => ['required', 'string', 'min:4'],
+        'file' => ['required', 'file'],
     ]);
 
-    User::create($attributes);
+    $attributes['user_id'] = Auth::id();
+    $attributes['attachment'] = $attributes['file']->store('workouts');
+    $attributes['mimetype'] = $attributes['file']->getMimeType();
+    $attributes['distance'] = 0;
+    $attributes['duration'] = 0;
+    $attributes['pace'] = 0;
+    $attributes['heart_rate'] = 0;
+    $attributes['elevation_gain'] = 0;
+    $attributes['date'] = now();
+    $attributes['trackpoints_heart_rate'] = [];
+
+    Workout::create($attributes);
 
     return redirect('workouts/create'); // ->with('success', 'Workout created.');
 })->middleware(['auth', 'verified'])->name('workouts.store');
