@@ -1,7 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, router, useForm } from '@inertiajs/vue3';
-import { reactive } from 'vue';
+import { Head, useForm } from '@inertiajs/vue3';
 
 let form = useForm({
     name: '',
@@ -9,7 +8,7 @@ let form = useForm({
 });
 
 let submit = () => {
-    form.post('/workouts/create', form);
+    form.post('/workouts/store', form);
 };
 
 </script>
