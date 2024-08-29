@@ -5,37 +5,12 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use App\Models\Workout;
 use Illuminate\Http\Request;
+use App\Services\GPXProcessor;
+use App\Services\TCXProcessor;
 use Illuminate\Support\Facades\Auth;
 
 class WorkoutController extends Controller
 {
-    public function processTCX($id)
-    {
-        $workout = Workout::where('id', $id)->first();
-
-        $tcx = simplexml_load_file(storage_path('app/' . $workout->attachment));
-
-        $trackpoints = [];
-
-        $counter = 0;
-        foreach($tcx->Activities->Activity->Lap as $lap) {
-            foreach($lap->Track->Trackpoint as $trackpoint) {
-                $counter++;
-                if ($counter % 25 == 0) {
-                    if ($trackpoint->HeartRateBpm) {
-                        $trackpoints[] = (int) $trackpoint->HeartRateBpm->Value[0];
-                    }
-                }
-            }
-        }
-
-        $workout->trackpoints_heart_rate = $trackpoints;
-
-        $workout->save();
-
-        return redirect('workouts');
-    }
-
     /**
      * Display a listing of the resource.
      */
@@ -59,6 +34,7 @@ class WorkoutController extends Controller
      */
     public function store(Request $request)
     {
+
         $attributes = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'file' => ['required', 'file'],
@@ -67,13 +43,18 @@ class WorkoutController extends Controller
         $attributes['user_id'] = Auth::id();
         $attributes['attachment'] = $attributes['file']->store('workouts');
         $attributes['mimetype'] = $attributes['file']->getMimeType();
+        $attributes['file_extension'] = $request->file('file')->getClientOriginalExtension();
 
         $newWorkout = Workout::create($attributes);
         $workoutId = $newWorkout->id;
 
-        $this->processTCX($workoutId);
-
-        return redirect('workouts');
+        if ($attributes['file_extension'] == 'gpx') {
+            return GPXProcessor::process($workoutId);
+        } else if ($attributes['file_extension'] == 'tcx') {
+            return TCXProcessor::process($workoutId);
+        } else {
+            return redirect('workouts');
+        }
     }
 
     /**
