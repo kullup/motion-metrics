@@ -178,12 +178,7 @@ if (document.getElementById("area-chart") && typeof ApexCharts !== 'undefined') 
                 </div>
             </div>
 
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
-                    <div v-for="trackpoint in workout.trackpoints_heart_rate" :key="workout.id"
-                        class="text-gray-900 dark:text-gray-100">{{ trackpoint }}</div>
-                </div>
-            </div>
+            
         </div>
     </AuthenticatedLayout>
 </template>
