@@ -12,6 +12,8 @@ class Workout extends Model
     protected $fillable = [
         'user_id',
         'name',
+        'type_gpx',
+        'date_gpx',
         'attachment',
         'mimetype',
         'file_extension',
@@ -26,6 +28,8 @@ class Workout extends Model
 
     protected $casts = [
         'name' => 'string',
+        'type_gpx' => 'string',
+        'date_gpx' => 'date',
         'attachment' => 'string',
         'mimetype' => 'string',
         'file_extension' => 'string',

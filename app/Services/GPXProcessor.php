@@ -3,39 +3,32 @@
 namespace App\Services;
 
 use App\Models\Workout;
+use Saloon\XmlWrangler\XmlReader;
 
 class GPXProcessor
 {
-    /**
-     * Create a new class instance.
-     */
-    public function __construct()
-    {
-        //
-    }
-
     public static function process($id)
     {
-        $workout = Workout::where('id', $id)->first();
-
-        $gpx = simplexml_load_file(storage_path('app/' . $workout->attachment));
-
         $trackpoints = [];
 
+        $workout = Workout::where('id', $id)->first();
+
+        $filePath = storage_path('app/' . $workout->attachment);
+
+        $reader = XmlReader::fromFile($filePath);
+
         $counter = 0;
-        
-        foreach($gpx->trk->trkseg->trkpt as $trackpoint) {
-            dd($trackpoint->extensions);
+        foreach($reader->values()['gpx']['trk']['trkseg']['trkpt'] as $trackpoint) {
             $counter++;
             if ($counter % 25 == 0) {
-                if ($trackpoint->HeartRateBpm) {
-                    $trackpoints[] = (int) $trackpoint->HeartRateBpm->Value[0];
-                }
+                $trackpoints[] = $trackpoint['extensions']['gpxtpx:TrackPointExtension']['gpxtpx:hr'];
             }
         }
         
-
         $workout->trackpoints_heart_rate = $trackpoints;
+        $workout->name = $reader->values()['gpx']['trk']['name'];
+        $workout->type_gpx = $reader->values()['gpx']['trk']['type'];
+        $workout->date_gpx = $reader->values()['gpx']['metadata']['time'];
 
         $workout->save();
 

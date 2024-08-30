@@ -7,6 +7,13 @@ defineProps({
         type: Array,
     },
 });
+
+function formatDate(dateString) {
+    const options = { weekday: 'short', month: 'short', day: 'numeric' };
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', options);
+}
+
 </script>
 
 <template>
@@ -33,13 +40,10 @@ defineProps({
                                             Name
                                         </th>
                                         <th scope="col" class="px-6 py-3">
-                                            //
+                                            Type
                                         </th>
                                         <th scope="col" class="px-6 py-3">
-                                            //
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            //
+                                            Date
                                         </th>
                                         <th scope="col" class="px-6 py-3">
                                             <span class="sr-only">Edit</span>
@@ -55,17 +59,15 @@ defineProps({
                                             {{ workout.name }}
                                         </th>
                                         <td class="px-6 py-4">
-                                            //
+                                            {{ workout.type_gpx }}
                                         </td>
                                         <td class="px-6 py-4">
-                                            // 
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            // 
+                                            {{ formatDate(workout.date_gpx) }}
                                         </td>
                                         <td class="px-6 py-4 text-right">
-                                            <Link :href="`/workouts/show/${workout.id}`" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                                                View
+                                            <Link :href="`/workouts/show/${workout.id}`"
+                                                class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                            View
                                             </Link>
                                         </td>
                                     </tr>
