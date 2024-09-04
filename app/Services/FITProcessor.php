@@ -13,7 +13,7 @@ class FITProcessor
         $filePath = storage_path('app/' . $workout->attachment);
         $pFFA = new phpFITFileAnalysis($filePath, ['units' => 'metric']);
 
-       // dd($pFFA->data_mesgs);
+        // dd($pFFA->data_mesgs);
 
         $hr_raw = $pFFA->data_mesgs['record']['heart_rate'];
         $hr_optimized = [];
@@ -25,9 +25,8 @@ class FITProcessor
         }
 
         $workout->trackpoints_heart_rate = $hr_optimized;
-        $workout->name = '';// $reader->values()['gpx']['trk']['name'];
-        $workout->type_gpx = ''; // $reader->values()['gpx']['trk']['type'];
-        $workout->date_gpx = '';// $reader->values()['gpx']['metadata']['time'];
+        $workout->type_gpx = $pFFA->enumData('sport', $pFFA->data_mesgs['sport']['sport']);  
+        $workout->date_gpx = $pFFA->data_mesgs['activity']['timestamp'];
 
         $workout->save();
 
