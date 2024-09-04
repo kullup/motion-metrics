@@ -7,6 +7,7 @@ use App\Models\Workout;
 use Illuminate\Http\Request;
 use App\Services\GPXProcessor;
 use App\Services\TCXProcessor;
+use App\Services\FITProcessor;
 use Illuminate\Support\Facades\Auth;
 
 class WorkoutController extends Controller
@@ -36,10 +37,11 @@ class WorkoutController extends Controller
     {
 
         $attributes = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            // 'name' => ['required', 'string', 'max:255'],
             'file' => ['required', 'file'],
         ]);
     
+        $attributes['name'] = $request->file('file')->getClientOriginalName();
         $attributes['user_id'] = Auth::id();
         $attributes['attachment'] = $attributes['file']->store('workouts');
         $attributes['mimetype'] = $attributes['file']->getMimeType();
@@ -48,7 +50,9 @@ class WorkoutController extends Controller
         $newWorkout = Workout::create($attributes);
         $workoutId = $newWorkout->id;
 
-        if ($attributes['file_extension'] == 'gpx') {
+        if ($attributes['file_extension'] == 'fit') {
+            return FITProcessor::process($workoutId);
+        } else if ($attributes['file_extension'] == 'gpx') {
             return GPXProcessor::process($workoutId);
         } else if ($attributes['file_extension'] == 'tcx') {
             return TCXProcessor::process($workoutId);

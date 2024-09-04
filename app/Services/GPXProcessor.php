@@ -9,7 +9,9 @@ class GPXProcessor
 {
     public static function process($id)
     {
-        $trackpoints = [];
+        $trackpoints_raw = [];
+        $trackpoints_optimized = [];
+        $average_heart_rate = 0;
 
         $workout = Workout::where('id', $id)->first();
 
@@ -17,15 +19,18 @@ class GPXProcessor
 
         $reader = XmlReader::fromFile($filePath);
 
-        $counter = 0;
-        foreach($reader->values()['gpx']['trk']['trkseg']['trkpt'] as $trackpoint) {
-            $counter++;
-            if ($counter % 25 == 0) {
-                $trackpoints[] = $trackpoint['extensions']['gpxtpx:TrackPointExtension']['gpxtpx:hr'];
-            }
+        $trackpoints_raw = $reader->values()['gpx']['trk']['trkseg']['trkpt'];
+
+        dd($trackpoints_raw);
+
+        for ($i = 0; $i < count($trackpoints_raw); $i += 25) {
+            $trackpoint = $trackpoints_raw[$i];
+            dd($trackpoint);
+            $average_heart_rate += $trackpoint['extensions']['gpxtpx:TrackPointExtension']['gpxtpx:hr'];
+            $trackpoints_optimized[] = $trackpoint['extensions']['gpxtpx:TrackPointExtension']['gpxtpx:hr'];
         }
         
-        $workout->trackpoints_heart_rate = $trackpoints;
+        $workout->trackpoints_heart_rate = $trackpoints_optimized;
         $workout->name = $reader->values()['gpx']['trk']['name'];
         $workout->type_gpx = $reader->values()['gpx']['trk']['type'];
         $workout->date_gpx = $reader->values()['gpx']['metadata']['time'];
