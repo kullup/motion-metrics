@@ -18,13 +18,13 @@ let options = {
             enabled: false,
         },
         toolbar: {
-            show: false,
+            show: true,
         },
     },
     tooltip: {
         enabled: true,
         x: {
-            show: false,
+            format: 'dd/MM/yy HH:mm'
         },
     },
     fill: {
@@ -59,10 +59,9 @@ let options = {
         },
     ],
     xaxis: {
-        show: true,
+        type: 'datetime',
         categories: props.workout.labels,
         labels: {
-            show: true,
             style: {
                 fontFamily: "Inter, sans-serif",
                 cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400'
@@ -70,9 +69,6 @@ let options = {
         },
         axisBorder: {
             show: false,
-        },
-        axisTicks: {
-            show: true,
         },
     },
     yaxis: {
@@ -118,7 +114,7 @@ if (document.getElementById("area-chart") && typeof ApexCharts !== 'undefined') 
                                     </svg>
                                 </div>
                             </div>
-                            <VueApexCharts width="100%" height="200" type="area" :options="options"
+                            <VueApexCharts width="100%" height="300" type="area" :options="options"
                                 :series="options.series" />
                             <div
                                 class="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">
