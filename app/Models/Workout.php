@@ -23,7 +23,14 @@ class Workout extends Model
         'heart_rate',
         'elevation_gain',
         'date',
-        'trackpoints_heart_rate'
+        'trackpoints_heart_rate',
+        'labels',
+        'ride_time',
+        'total_time',
+        'avg_speed',
+        'max_speed',
+        'avg_hr',
+        'max_hr',
     ];
 
     protected $casts = [
@@ -40,6 +47,13 @@ class Workout extends Model
         'elevation_gain' => 'float',
         'date' => 'date',
         'trackpoints_heart_rate' => 'array',
+        'labels' => 'array',
+        'ride_time' => 'integer',
+        'total_time' => 'integer',
+        'avg_speed' => 'integer',
+        'max_speed' => 'integer',
+        'avg_hr' => 'integer',
+        'max_hr' => 'integer',
     ];
 
     public function user()

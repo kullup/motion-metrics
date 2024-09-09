@@ -60,7 +60,7 @@ let options = {
     ],
     xaxis: {
         show: true,
-        categories: ['01 Feb', '02 Feb', '03 Feb', '04 Feb', '05 Feb', '06 Feb', '07 Feb'],
+        categories: props.workout.labels,
         labels: {
             show: true,
             style: {
