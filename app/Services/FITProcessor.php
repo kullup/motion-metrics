@@ -17,15 +17,29 @@ class FITProcessor
 
         $hr_raw = $pFFA->data_mesgs['record']['heart_rate'];
         $hr_optimized = [];
+        $labels = [];
+        $first_timestamp = array_key_first($hr_raw);
+        $hr_interval = (int) (count($hr_raw) / 50);
+        $label_interval = (int) $hr_interval * 5;
 
-        for ($i=array_key_first($hr_raw); $i <  array_key_last($hr_raw); $i += 50) { 
-            if(array_key_exists($i, $hr_raw)) {
-                $hr_optimized[] = $hr_raw[$i];
+        for ($i = 0; $i < count($hr_raw); $i++) {
+            if ($i % $hr_interval == 0) {
+                if (array_key_exists($first_timestamp + $i, $hr_raw)) {
+                    $hr_optimized[] = $hr_raw[$first_timestamp + $i];
+                    $labels[] = '';
+                }
+            }
+            if ($i % $label_interval == 0) {
+                if (array_key_exists($first_timestamp + $i, $hr_raw)) {
+                    $labels[] = $first_timestamp + $i;
+                }
             }
         }
 
+        dd($labels, $hr_optimized);
+
         $workout->trackpoints_heart_rate = $hr_optimized;
-        $workout->type_gpx = $pFFA->enumData('sport', $pFFA->data_mesgs['sport']['sport']);  
+        $workout->type_gpx = $pFFA->enumData('sport', $pFFA->data_mesgs['sport']['sport']);
         $workout->date_gpx = $pFFA->data_mesgs['activity']['timestamp'];
 
         $workout->save();

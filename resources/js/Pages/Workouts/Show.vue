@@ -32,8 +32,8 @@ let options = {
         gradient: {
             opacityFrom: 0.55,
             opacityTo: 0,
-            shade: "#1C64F2",
-            gradientToColors: ["#1C64F2"],
+            shade: "#f21c1c",
+            gradientToColors: ["#f21c1c"],
         },
     },
     dataLabels: {
@@ -54,20 +54,25 @@ let options = {
     series: [
         {
             name: "New users",
-            data:  props.workout.trackpoints_heart_rate,
-            color: "#1A56DB",
+            data: props.workout.trackpoints_heart_rate,
+            color: "#f21c1c",
         },
     ],
     xaxis: {
-        categories: ['01 February', '02 February', '03 February', '04 February', '05 February', '06 February', '07 February'],
+        show: true,
+        categories: ['01 Feb', '02 Feb', '03 Feb', '04 Feb', '05 Feb', '06 Feb', '07 Feb'],
         labels: {
-            show: false,
+            show: true,
+            style: {
+                fontFamily: "Inter, sans-serif",
+                cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400'
+            }
         },
         axisBorder: {
             show: false,
         },
         axisTicks: {
-            show: false,
+            show: true,
         },
     },
     yaxis: {
@@ -113,7 +118,8 @@ if (document.getElementById("area-chart") && typeof ApexCharts !== 'undefined') 
                                     </svg>
                                 </div>
                             </div>
-                            <VueApexCharts width="100%" height="200" type="area" :options="options" :series="options.series" />
+                            <VueApexCharts width="100%" height="200" type="area" :options="options"
+                                :series="options.series" />
                             <div
                                 class="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">
                                 <div class="flex justify-between items-center pt-5">
@@ -178,7 +184,7 @@ if (document.getElementById("area-chart") && typeof ApexCharts !== 'undefined') 
                 </div>
             </div>
 
-            
+
         </div>
     </AuthenticatedLayout>
 </template>
