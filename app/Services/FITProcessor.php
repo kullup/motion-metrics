@@ -33,10 +33,10 @@ class FITProcessor
             }
         }
 
-        $last_known_hr = 0;
-        foreach ($timestamps_optimized as $timestamp) {
-            if (array_key_exists($timestamp, $hr_raw)) {
-                $last_known_hr = $hr_raw[$timestamp];
+        $last_known_hr = 100;
+        for ($k = 1; $k < count($timestamps_optimized); $k++) {
+            if (array_key_exists($timestamps_optimized[$k], $hr_raw)) {
+                $last_known_hr = $hr_raw[$timestamps_optimized[$k]];
                 $hr_optimized[] = $last_known_hr;
             } else {
                 $hr_optimized[] = $last_known_hr;

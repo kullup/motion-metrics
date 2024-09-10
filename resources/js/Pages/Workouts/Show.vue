@@ -24,7 +24,7 @@ let options = {
     tooltip: {
         enabled: true,
         x: {
-            format: 'dd/MM/yy HH:mm'
+            format: 'HH:mm'
         },
     },
     fill: {
@@ -43,7 +43,7 @@ let options = {
         width: 2,
     },
     grid: {
-        show: false,
+        show: true,
         strokeDashArray: 4,
         padding: {
             left: 2,
@@ -53,26 +53,29 @@ let options = {
     },
     series: [
         {
-            name: "New users",
+            name: "HR",
             data: props.workout.trackpoints_heart_rate,
             color: "#f21c1c",
         },
     ],
     xaxis: {
-        type: 'datetime',
+        type: "datetime",
         categories: props.workout.labels,
         labels: {
             style: {
                 fontFamily: "Inter, sans-serif",
                 cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400'
-            }
+            },
+            format: 'HH:mm'
         },
         axisBorder: {
             show: false,
         },
+        tickAmount: 3,
     },
     yaxis: {
         show: false,
+        type: "numeric",
     },
 };
 
