@@ -14,7 +14,7 @@ class FITProcessor
         $filePath = storage_path('app/' . $workout->attachment);
         $pFFA = new phpFITFileAnalysis($filePath, ['units' => 'metric']);
 
-        // dd($pFFA->data_mesgs['record']['speed']);
+        // dd($pFFA->data_mesgs);
 
         $hr_raw = $pFFA->data_mesgs['record']['heart_rate'];
         $speed_raw = $pFFA->data_mesgs['record']['speed'];
@@ -60,9 +60,18 @@ class FITProcessor
 
         $workout->trackpoints_heart_rate = $hr_optimized;
         $workout->trackpoints_speed = $speed_optimized;
+        $workout->avg_speed = $pFFA->data_mesgs['session']['avg_speed'];
+        $workout->max_speed = $pFFA->data_mesgs['session']['max_speed'];
+        $workout->avg_hr = $pFFA->data_mesgs['session']['avg_heart_rate'];
+        $workout->max_hr = $pFFA->data_mesgs['session']['max_heart_rate'];
         $workout->labels = $labels;
+        $workout->total_ascent = $pFFA->data_mesgs['session']['total_ascent'];
+        $workout->total_descent = $pFFA->data_mesgs['session']['total_descent'];
+        $workout->distance = $pFFA->data_mesgs['session']['total_distance'];
+        $workout->total_time = $pFFA->data_mesgs['session']['total_elapsed_time'];
+        $workout->ride_time = $pFFA->data_mesgs['session']['total_timer_time'];
         $workout->type_gpx = $pFFA->enumData('sport', $pFFA->data_mesgs['sport']['sport']);
-        $workout->date_gpx = $pFFA->data_mesgs['activity']['timestamp'];
+        $workout->date_gpx = $timestamps_optimized[0];
 
         $workout->save();
 

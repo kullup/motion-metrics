@@ -45,6 +45,7 @@ function formatDate(dateString) {
                                         <th scope="col" class="px-6 py-3">
                                             Date
                                         </th>
+                                        
                                         <th scope="col" class="px-6 py-3">
                                             <span class="sr-only">Edit</span>
                                         </th>
