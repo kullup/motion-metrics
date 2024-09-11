@@ -31,6 +31,7 @@ class Workout extends Model
         'max_speed',
         'avg_hr',
         'max_hr',
+        'trackpoints_speed',
     ];
 
     protected $casts = [
@@ -54,6 +55,7 @@ class Workout extends Model
         'max_speed' => 'integer',
         'avg_hr' => 'integer',
         'max_hr' => 'integer',
+        'trackpoints_speed' => 'array',
     ];
 
     public function user()

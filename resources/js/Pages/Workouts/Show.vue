@@ -20,6 +20,34 @@ let options = {
         toolbar: {
             show: true,
         },
+        zoom: {
+            enabled: true,
+            type: 'x',
+            autoScaleYaxis: false,
+            zoomedArea: {
+                fill: {
+                    color: '#90CAF9',
+                    opacity: 0.4
+                },
+                stroke: {
+                    color: '#0D47A1',
+                    opacity: 0.4,
+                    width: 1
+                }
+            }
+        },
+        events: {
+            mounted: function(chartContext, config) {
+                const chartElement = document.getElementById("area-chart");
+                chartElement.addEventListener('wheel', function(event) {
+                    event.preventDefault();
+                    const delta = Math.sign(event.deltaY);
+                    const zoomLevel = chartContext.w.globals.zoomed ? chartContext.w.globals.zoomed : 1;
+                    const newZoomLevel = zoomLevel + delta * 0.1;
+                    chartContext.zoomX(newZoomLevel);
+                });
+            }
+        }
     },
     tooltip: {
         enabled: true,
@@ -57,6 +85,11 @@ let options = {
             data: props.workout.trackpoints_heart_rate,
             color: "#f21c1c",
         },
+        {
+            name: "Speed",
+            data: props.workout.trackpoints_speed,
+            color: "#1F51FF",
+        },
     ],
     xaxis: {
         type: "datetime",
@@ -73,10 +106,25 @@ let options = {
         },
         tickAmount: 3,
     },
-    yaxis: {
-        show: false,
-        type: "numeric",
-    },
+    yaxis: [
+        {
+            seriesName: "HR",
+            labels: {
+                formatter: (value) => {
+                    return Math.floor(value);
+                },
+            }
+        },
+        {
+            opposite: true,
+            seriesName: "Speed",
+            labels: {
+                formatter: (value) => {
+                    return value.toFixed(1);
+                },
+            }
+        },
+    ]
 };
 
 if (document.getElementById("area-chart") && typeof ApexCharts !== 'undefined') {
@@ -95,7 +143,7 @@ if (document.getElementById("area-chart") && typeof ApexCharts !== 'undefined') 
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">{{ workout.name }}</h2>
         </template>
 
-        <div class="py-12">
+        <div class="py-6">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 pb-6">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="text-gray-900 dark:text-gray-100">
@@ -117,7 +165,7 @@ if (document.getElementById("area-chart") && typeof ApexCharts !== 'undefined') 
                                     </svg>
                                 </div>
                             </div>
-                            <VueApexCharts width="100%" height="300" type="area" :options="options"
+                            <VueApexCharts id="area-chart" width="100%" height="400" type="area" :options="options"
                                 :series="options.series" />
                             <div
                                 class="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">

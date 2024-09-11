@@ -14,19 +14,18 @@ class FITProcessor
         $filePath = storage_path('app/' . $workout->attachment);
         $pFFA = new phpFITFileAnalysis($filePath, ['units' => 'metric']);
 
-        // dd($pFFA->data_mesgs);
+        // dd($pFFA->data_mesgs['record']['speed']);
 
         $hr_raw = $pFFA->data_mesgs['record']['heart_rate'];
-        $hr_optimized = [];
-        $labels = [];
-        $first_timestamp = array_key_first($hr_raw);
-
-        $label_interval = 20;
-
-
-
+        $speed_raw = $pFFA->data_mesgs['record']['speed'];
         $timestamps_raw = $pFFA->data_mesgs['record']['timestamp'];
+
         $timestamps_optimized = [];
+        $speed_optimized = [];
+        $hr_optimized = [];
+
+        $labels = [];
+
         for ($j = 0; $j < count($timestamps_raw); $j += 50) {
             if (array_key_exists($j, $timestamps_raw)) {
                 $timestamps_optimized[] = $timestamps_raw[$j];
@@ -43,6 +42,14 @@ class FITProcessor
             }
         }
 
+        for ($k = 1; $k < count($timestamps_optimized); $k++) {
+            if (array_key_exists($timestamps_optimized[$k], $speed_raw)) {
+                $speed_optimized[] = $speed_raw[$timestamps_optimized[$k]];
+            } else {
+                $speed_optimized[] = 0;
+            }
+        }
+
         for ($i = 1; $i < count($timestamps_optimized); $i++) {
             $timestamp = $timestamps_optimized[$i];
             $date = new DateTime();
@@ -52,6 +59,7 @@ class FITProcessor
         }
 
         $workout->trackpoints_heart_rate = $hr_optimized;
+        $workout->trackpoints_speed = $speed_optimized;
         $workout->labels = $labels;
         $workout->type_gpx = $pFFA->enumData('sport', $pFFA->data_mesgs['sport']['sport']);
         $workout->date_gpx = $pFFA->data_mesgs['activity']['timestamp'];
