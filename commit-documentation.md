@@ -1,5 +1,16 @@
 These are the git commits from my project:
 
+
+3d2063c - update composer.lock
+this was to get the sqlite extension to work on a server.
+
+5521e72 - add sqlite extension to composer.json
+this was to get the sqlite extension to work on a server.
+
+56ec233 - add data fields with statistics to the show template
+
+2b4488e - process the recorded speed data into an optimized array for charting library
+
 6a0ba57 - Refactor FITProcessor to optimize heart rate processing
 A little bit of cleanup in the code with the goal of making it more readable and extensible.
 
@@ -17,7 +28,7 @@ baf47ce - add type and date to gpx
 Workout Type and Date can now also be read from fit files using the PHPFitFileAnalysis library
 
 5b88e46 - fit file hr processing works
-I wasn't able to properly read the heart rate data from the gpx file because it was embedded inside the Tag and not inbetween two tags like it is usually. After some researching i found the libaray PHPFitFileAnalysis wich allows you to read and proccess fit files using php. The fit format is the other one of the two export options on strava. It was originnally developed by Garmin and is now the most commonly used format used by Fitnesstrackers. 
+I wasn't able to properly read the heart rate data from the gpx file because it was embedded inside the Tag and not inbetween two tags like it is usually. After some researching i found the libaray PHPFitFileAnalysis wich allows you to read and proccess fit files using php. The fit format is the other one of the two export options on strava. It was originn ally developed by Garmin and is now the most commonly used format used by Fitnesstrackers. 
 
 1fb8c58 - gpx processor with xml-wrangler
 Unfortunately, the simplexml_load_file() function was limited to reading the first few levels of the xml file. So i used this libaray to parse the xml file instead. 
