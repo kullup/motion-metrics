@@ -172,7 +172,7 @@ function formatDate(dateString) {
                                     <dd class="text-gray-500 dark:text-gray-400">Ride Time</dd>
                                 </div>
                                 <div class="flex flex-col items-center justify-center">
-                                    <dt class="mb-2 text-3xl font-extrabold">{{ formatTime(workout.duration - workout.ride_time) }}<small class="text-base font-light"> h</small></dt>
+                                    <dt class="mb-2 text-3xl font-extrabold">{{ formatTime(workout.total_time - workout.ride_time) }}<small class="text-base font-light"> h</small></dt>
                                     <dd class="text-gray-500 dark:text-gray-400">Pause Time</dd>
                                 </div>
                                 <div class="flex flex-col items-center justify-center">
